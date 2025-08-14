@@ -1,0 +1,50 @@
+enable
+configure terminal
+hostname Router
+interface Ethernet0/0
+ ip address 192.168.1.253 255.255.255.252
+ duplex full
+ no shutdown
+
+interface Ethernet0/1
+ ip address 192.168.1.249 255.255.255.252
+ duplex full
+ no shutdown
+
+
+
+
+router ospf 1
+ router-id 3.3.3.3
+ network 192.168.0.0 0.0.63.255 area 0
+ network 192.168.128.0 0.0.31.255 area 0
+ network 192.168.160.0 0.0.0.255 area 0
+ default-information originate
+exit
+
+============================
+ access-list 1 permit 192.168.0.0 0.0.255.255
+ ip nat inside source list 1 interface Ethernet0/2 overload
+============================
+ access-list 1 permit 192.168.0.0 0.0.63.255
+ access-list 1 permit 192.168.128.0 0.0.31.255
+ access-list 1 permit 192.168.160.0 0.0.0.255
+ ip nat inside source list 1 interface Ethernet0/2 overload
+
+interface Ethernet0/0
+ ip nat inside
+ duplex full
+
+interface Ethernet0/1
+ ip nat outside
+ duplex full
+
+interface Ethernet0/2
+ip nat outside
+ duplex full
+
+interface Ethernet0/2
+ip address dhcp
+no shutdown
+
+exit

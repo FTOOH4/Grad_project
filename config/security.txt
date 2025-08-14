@@ -1,0 +1,72 @@
+
+!!!!!!!!! access ports
+interface range e0/0,e0/2 	
+spanning-tree portfast edge
+spanning-tree bpduguard enabl 
+
+
+switchport port-security
+switchport port-security maximum 2
+switchport port-security mac-address sticky
+===============================================================================
+
+!!!!!! global config
+ip dhcp snooping vlan 10
+ip dhcp snooping vlan 20
+	
+int ran e0/1,e0/3		!  => to dhcp server
+ip dhcp snooping trust 
+
+int vlan 10
+ip helper-address 192.168.140.200
+
+int vlan 20
+ip helper-address 192.168.140.200
+	
+(متكتبوش فالشبكة)
+interface range e0/0,e0/2 	! on access ports 
+ip dhcp snooping limit rate 1
+	
+===============================================================================
+ip arp inspection vlan 10
+ip arp inspection vlan 20
+
+int ran e0/1,e0/3   !! ===> to server
+ip arp inspection trust
+
+!!!!! global config
+ip arp inspection validate dst-mac
+ip arp inspection validate ip
+ip arp inspection validate src-mac   
+
+
+
+(متكتبهمش عالسويتش)
+(static ip دي لو عندك طابعه او جهاز بياخد )
+·  arp access-list MY-ARP-LIST
+·  permit ip host 192.168.10.1 mac host AAAA.AAAA.AAAA
+·  ip arp inspection filter  MY-ARP-LIST vlan 10
+
+ip source binding AAAA.AAAA.AAA  vlan 10 192.168.10.1 interface e0/0
+==================================================================================
+ (ملوش لازمة هنا)
+2-IP Source Guard (IPSG)  ip Spoofing
+ interface range e0/0,e0/2
+ ip verify source port-security
+==================================================================================
+(متكتبهمش عالسويتش)
+aaa new-model 
+Radius server ISE
+address IPv4 192.168.100.250 auth-port 1812 acct-port 1813
+key cisco123
+exit
+aaa authentication dot1x default group radius 
+dot1x system-auth-control 
+int ran e0/0,e0/2
+authentication port-control auto 
+dot1x pae authenticator 
+exit
+========================================================
+Native VLAN (on trunk links) vlan hopping 
+
+Err disable recovery cause & interval 300

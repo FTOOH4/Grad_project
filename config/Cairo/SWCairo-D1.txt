@@ -1,0 +1,127 @@
+
+hostname SWCairo-D1
+!
+!
+spanning-tree mode rapid-pvst
+spanning-tree extend system-id
+spanning-tree vlan 10,20 priority 24576
+spanning-tree vlan 30,40 priority 28672
+!
+!
+!
+interface Port-channel12
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Ethernet0/0
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-group 12 mode active
+!
+interface Ethernet0/1
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Ethernet0/2
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!         
+interface Ethernet0/3
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Ethernet1/0
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Ethernet1/1
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-group 12 mode active
+!
+interface Ethernet1/2
+ no switchport
+ ip address 192.168.1.2 255.255.255.252
+ duplex auto
+!
+interface Ethernet1/3
+ no switchport
+ ip address 192.168.1.18 255.255.255.252
+ duplex auto
+!
+interface Ethernet2/0
+!
+interface Ethernet2/1
+!
+interface Ethernet2/2
+!
+interface Ethernet2/3
+!
+interface Ethernet3/0
+!
+interface Ethernet3/1
+!
+interface Ethernet3/2
+!
+interface Ethernet3/3
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+vtp domain cairo
+vtp version 3
+vtp mode server
+vtp password cairo
+!
+interface Vlan10
+ ip address 192.168.10.151 255.255.255.0
+ no shutdown
+ standby 10 priority 102
+ standby 10 ip 192.168.10.254
+ standby 10 preempt
+ standby 10 authentication md5 key-string Cairo
+ ip helper-address 192.168.140.200
+!
+interface Vlan20
+ ip address 192.168.20.151 255.255.255.0
+ no shutdown
+ standby 20 priority 102
+ standby 20 ip 192.168.20.254
+ standby 20 preempt
+ standby 20 authentication md5 key-string Cairo
+ ip helper-address 192.168.140.200
+!
+interface Vlan30
+ ip address 192.168.30.151 255.255.255.0
+ no shutdown
+ standby 30 ip 192.168.30.254
+ standby 30 preempt
+ standby 30 authentication md5 key-string Cairo
+ ip helper-address 192.168.140.200
+!
+interface Vlan40
+ ip address 192.168.40.151 255.255.255.0
+ no shutdown
+ standby 40 ip 192.168.40.254
+ standby 40 preempt
+ standby 40 authentication md5 key-string Cairo
+ ip helper-address 192.168.140.200
+!
+router ospf 1
+ router-id 0.0.0.1
+ network 192.168.0.0 0.0.255.255 area 0
+!
+!
+!
+end
+
+vtp primary vlan
+
+conf t
+vlan 10
+vlan 20
+vlan 30
+vlan 40
+exit
+

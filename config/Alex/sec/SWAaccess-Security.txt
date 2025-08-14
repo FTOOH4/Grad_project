@@ -1,0 +1,52 @@
+
+ip dhcp snooping
+ip dhcp snooping vlan 50,60,70,80
+ip arp inspection vlan 50,60,70,80
+
+interface range e1/0,e0/2
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ ip dhcp snooping trust
+ ip arp inspection trust
+ switchport trunk native vlan 777
+
+interface range e0/0
+ switchport mode access
+ switchport access vlan 70
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+ switchport port-security
+ switchport port-security maximum 2
+ switchport port-security mac-address sticky
+ ip dhcp snooping limit rate 1
+ ip verify source port-security
+
+interface range e0/1
+ switchport mode access
+ switchport access vlan 80
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+ switchport port-security
+ switchport port-security maximum 2
+ switchport port-security mac-address sticky
+ ip dhcp snooping limit rate 1
+ ip verify source port-security
+
+interface vlan 70
+ ip helper-address 192.168.70.254
+
+
+interface vlan 80
+ ip helper-address 192.168.80.254
+
+errdisable recovery cause bpduguard
+errdisable recovery interval 30
+
+interface vlan 50
+ ip helper-address 192.168.50.254
+
+
+interface vlan 60
+ ip helper-address 192.168.60.254
+
+

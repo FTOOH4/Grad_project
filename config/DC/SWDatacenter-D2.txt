@@ -1,0 +1,107 @@
+
+hostname SWDC-D2
+!
+!
+!
+spanning-tree mode rapid-pvst
+spanning-tree extend system-id
+spanning-tree vlan 130,140 priority 28672
+spanning-tree vlan 150,160 priority 24576
+!
+!
+!
+interface Port-channel 22
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Ethernet0/0
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-group 22 mode passive
+!
+interface Ethernet0/1
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-group 22 mode passive
+!
+interface Ethernet0/2
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Ethernet0/3
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Ethernet1/0
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Ethernet1/1
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Ethernet1/2
+ no switchport
+ ip address 192.168.1.38 255.255.255.252
+ duplex auto
+!
+interface Ethernet1/3
+ no switchport
+ ip address 192.168.1.46 255.255.255.252
+ duplex auto
+!
+!
+!
+vtp domain Datacenter
+vtp version 3
+vtp mode client
+vtp password Datacenter
+!
+!
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan130
+ ip address 192.168.130.252 255.255.255.0
+ standby 130 ip 192.168.130.254
+ standby 130 preempt
+ standby 130 authentication md5 key-string Datacenter
+ no shutdown
+ ip helper-address 192.168.140.200
+!
+interface Vlan140
+ ip address 192.168.140.252 255.255.255.0
+ standby 140 ip 192.168.140.254
+ standby 140 preempt
+ standby 140 authentication md5 key-string Datacenter
+ no shutdown
+ ip helper-address 192.168.140.200
+!
+interface Vlan150
+ ip address 192.168.150.252 255.255.255.0
+ standby 150 ip 192.168.150.254
+ standby 150 priority 102
+ standby 150 preempt
+ standby 150 authentication md5 key-string Datacenter
+ no shutdown
+ ip helper-address 192.168.140.200
+!
+interface Vlan160
+ ip address 192.168.160.252 255.255.255.0
+ standby 160 ip 192.168.160.254
+ standby 160 priority 102
+ standby 160 preempt
+ standby 160 authentication md5 key-string Datacenter
+ no shutdown
+ ip helper-address 192.168.140.200
+!
+router ospf 1
+ router-id 0.0.0.6
+ network 192.168.0.0 0.0.255.255 area 0
+!
+!
+end
+
+

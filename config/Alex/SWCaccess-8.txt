@@ -1,0 +1,52 @@
+
+hostname SWC-8
+!
+!
+!
+!
+interface Ethernet0/0
+ switchport access vlan 70
+ switchport mode access
+ duplex auto
+!
+interface Ethernet0/1
+ switchport access vlan 80
+ switchport mode access
+ duplex auto
+!
+interface Ethernet0/2
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ duplex auto
+!
+interface Ethernet0/3
+ duplex auto
+!         
+interface Ethernet1/0
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ duplex auto
+!
+!
+vtp domain alex
+vtp mode client
+vtp version 3
+vtp password alex hidden 
+!
+!
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan70
+ip helper-address 192.168.70.254
+ no shutdown
+!
+interface Vlan80
+ip helper-address 192.168.80.254
+ no shutdown
+!
+!
+end
+

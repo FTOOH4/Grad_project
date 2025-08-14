@@ -1,0 +1,43 @@
+
+hostname SWC-3
+!
+interface Ethernet0/0
+ switchport access vlan 30
+ switchport mode access
+ duplex auto
+!
+interface Ethernet0/1
+ switchport trunk encapsulation dot1q
+ duplex auto
+!
+interface Ethernet0/2
+ switchport trunk encapsulation dot1q
+ duplex auto
+!
+interface Ethernet0/3
+ switchport access vlan 40
+ switchport mode access
+ duplex auto
+!         
+!
+vtp domain cairo
+vtp mode client
+vtp version 3
+vtp password cairo hidden 
+!
+!
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan30
+ ip helper-address 192.168.30.254
+ no shutdown
+!
+interface Vlan40
+ ip helper-address 192.168.40.254
+ no shutdown
+!
+!
+end

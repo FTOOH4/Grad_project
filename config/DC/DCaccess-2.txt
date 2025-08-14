@@ -1,0 +1,45 @@
+
+!
+hostname SWDC-2
+!
+!
+!
+
+interface Ethernet0/0
+ switchport access vlan 140
+ switchport mode access
+ duplex auto
+!
+interface Ethernet0/1
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ duplex auto
+!
+interface Ethernet0/2
+ switchport access vlan 140
+ switchport mode access
+ duplex auto
+!
+interface Ethernet0/3
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ duplex auto
+!         
+!
+vtp domain Datacenter
+vtp mode client
+vtp version 3
+vtp password Datacenter hidden 
+!
+!
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan140
+ip helper-address 192.168.140.254
+ no shutdown
+!  
+!
+end
